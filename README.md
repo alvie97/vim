@@ -1,2 +1,2 @@
 # vim
-this is are my settings for vim
+this are my settings for vim
