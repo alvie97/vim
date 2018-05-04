@@ -10,13 +10,16 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 
-Plugin 'sheerun/vim-polyglot'
-Plugin 'jwalton512/vim-blade'
+Plugin 'octol/vim-cpp-enhanced-highlight'
+Plugin 'pangloss/vim-javascript'
+Plugin 'mxw/vim-jsx'
+Plugin 'sjl/badwolf'
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
+Plugin 'sheerun/vim-polyglot'
+Plugin 'jwalton512/vim-blade'
 Plugin 'scrooloose/nerdtree'
 Plugin 'kien/ctrlp.vim'
-Plugin 'Lokaltog/vim-powerline'
 Plugin 'rafi/awesome-vim-colorschemes'
 Plugin 'altercation/vim-colors-solarized'
 Plugin 'endel/vim-github-colorscheme'
@@ -25,7 +28,7 @@ Plugin 'mattn/emmet-vim'
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'tpope/vim-surround'
 Plugin 'othree/html5.vim'
-Plugin 'mjacobus/vim-snippets'
+"Plugin 'mjacobus/vim-snippets'
 Plugin 'docteurklein/php-getter-setter.vim'
 Plugin 'shawncplus/phpcomplete.vim'
 
@@ -48,9 +51,6 @@ let g:NERDTreeDirArrowCollapsible = '▾'
 
 " settings
 set encoding=utf-8 " Necessary to show Unicode glyphs
-let g:airline_powerline_fonts = 1
-let g:airline_theme='one'
-"let g:airline_solarized_bg='dark'
 set t_Co=256
 set rtp+=/usr/local/lib/python2.7/dist-packages/powerline/bindings/vim/
 " my settings
@@ -77,15 +77,11 @@ au FocusGained,BufEnter * :silent! !
 "Set default font in mac vim and gvim
 " Color scheme
 syntax enable
-" let g:solarized_termcolors=16
-" let g:colarized_termtrans = 1
-" let g:solarized_termcolors=256
-" let g:solarized_visibility = high
-" let g:solarized_contrast = high
 set background=dark
-colorscheme one
+colorscheme apprentice
+"set termguicolors
 
-set guifont=Inconsolata\ for\ Powerline\ 13
+"set guifont=Inconsolata\ for\ Powerline\ 13
 set cursorline    " highlight the current line
 set visualbell    " stop that ANNOYING beeping
 set wildmenu
@@ -103,8 +99,8 @@ set showmatch
 " Softtabs, 2 spaces
 "
 "
-set tabstop=2
-set shiftwidth=2
+set tabstop=4
+set shiftwidth=4
 set shiftround
 set expandtab
 
@@ -143,20 +139,20 @@ set sidescrolloff=15
 set sidescroll=1
 
 "Toggle relative numbering, and set to absolute on loss of focus or insert
-mode
-set rnu
-function! ToggleNumbersOn()
-  set nu!
-  set rnu
-endfunction
-function! ToggleRelativeOn()
-  set rnu!
-  set nu
-endfunction
-autocmd FocusLost * call ToggleRelativeOn()
-autocmd FocusGained * call ToggleRelativeOn()
-autocmd InsertEnter * call ToggleRelativeOn()
-autocmd InsertLeave * call ToggleRelativeOn()
+"mode
+"set rnu
+"function! ToggleNumbersOn()
+"  set nu!
+"  set rnu
+"endfunction
+"function! ToggleRelativeOn()
+"  set rnu!
+"  set nu
+"endfunction
+"autocmd FocusLost * call ToggleRelativeOn()
+"autocmd FocusGained * call ToggleRelativeOn()
+"autocmd InsertEnter * call ToggleRelativeOn()
+"autocmd InsertLeave * call ToggleRelativeOn()
 
 "Use enter to create new lines w/o entering insert mode
 nnoremap <CR> o<Esc>
@@ -186,6 +182,7 @@ nnoremap <silent> <Left> :vertical resize -5<cr>
 nnoremap <silent> <Up> :resize +5<cr>
 nnoremap <silent> <Down> :resize -5<cr>
 
+inoremap <Tab> <c-r>=InsertTabWrapper()<cr>
 inoremap <S-Tab> <c-n>
 
 " Switch between the last two files
@@ -206,10 +203,10 @@ autocmd BufEnter * silent! cd %:p:h
 filetype plugin indent on
 
 """ SYSTEM CLIPBOARD COPY & PASTE SUPPORT
-set pastetoggle=<F2> "F2 before pasting to preserve indentation Copy paste to/from clipboard
-vnoremap <C-c> "*y
-map <silent><Leader>p :set paste<CR>o<esc>"*]p:set nopaste<cr>"
-map <silent><Leader><S-p> :set paste<CR>O<esc>"*]p:set nopaste<cr>"
+"set pastetoggle=<F2> "F2 before pasting to preserve indentation Copy paste to/from clipboard
+"vnoremap <C-c> "*y
+"map <silent><Leader>p :set paste<CR>o<esc>"*]p:set nopaste<cr>"
+"map <silent><Leader><S-p> :set paste<CR>O<esc>"*]p:set nopaste<cr>"
 
 """ MORE AWESOME HOTKEYS
 
@@ -217,5 +214,33 @@ map <silent><Leader><S-p> :set paste<CR>O<esc>"*]p:set nopaste<cr>"
 nnoremap <leader>q @q
 let g:ycm_global_ycm_extra_conf = '~/.vim/bundle/YouCompleteMe/third_party/ycmd/cpp/ycm/.ycm_extra_conf.py'
 
+" air-line
+let g:airline_powerline_fonts = 1
+let g:airline_theme = "hybrid"
+"let g:airline_solarized_bg='dark'
 
+if !exists('g:airline_symbols')
+    let g:airline_symbols = {}
+endif
 
+" unicode symbols
+let g:airline_left_sep = '»'
+let g:airline_left_sep = '▶'
+let g:airline_right_sep = '«'
+let g:airline_right_sep = '◀'
+let g:airline_symbols.linenr = '␊'
+let g:airline_symbols.linenr = '␤'
+let g:airline_symbols.linenr = '¶'
+let g:airline_symbols.branch = '⎇'
+let g:airline_symbols.paste = 'ρ'
+let g:airline_symbols.paste = 'Þ'
+let g:airline_symbols.paste = '∥'
+let g:airline_symbols.whitespace = 'Ξ'
+" airline symbols
+let g:airline_left_sep = ''
+let g:airline_left_alt_sep = ''
+let g:airline_right_sep = ''
+let g:airline_right_alt_sep = ''
+let g:airline_symbols.branch = ''
+let g:airline_symbols.readonly = ''
+let g:airline_symbols.linenr = ''
